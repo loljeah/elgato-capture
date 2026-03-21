@@ -1,0 +1,9 @@
+# Nix
+result
+result-*
+
+# Editor
+*~
+*.swp
+.vscode/
+.idea/
