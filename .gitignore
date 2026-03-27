@@ -7,3 +7,4 @@ result-*
 *.swp
 .vscode/
 .idea/
+mpv-shot*.jpg

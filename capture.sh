@@ -60,6 +60,18 @@ else
     fi
 fi
 
+# --- Query actual resolution from device ---
+ACTUAL_RES=$(v4l2-ctl -d "$VIDEO_DEVICE" --get-fmt-video 2>/dev/null | \
+    grep "Width/Height" | \
+    sed 's/.*: //' | \
+    tr -d '[:space:]') || true
+
+if [[ -n "$ACTUAL_RES" ]]; then
+    echo "Resolution: $ACTUAL_RES (from device)"
+else
+    echo "Resolution: auto"
+fi
+
 # --- Launch mpv ---
 echo ""
 echo "Starting capture... (press 'q' to quit)"
@@ -71,7 +83,6 @@ exec mpv \
     --profile=low-latency \
     --untimed \
     --no-cache \
-    --demuxer-lavf-o=video_size=${WIDTH}x${HEIGHT}:framerate=${FPS}:input_format=yuyv422 \
     --demuxer-lavf-format=v4l2 \
     $AUDIO_OPTS \
-    "av://v4l2:$VIDEO_DEVICE"
+    "$VIDEO_DEVICE"
